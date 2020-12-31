@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p class="title">线路总览</p>
+    <!-- <product :data="data" /> -->
+    <p class="title">{{ data.title }}</p>
     <div class="line"></div>
     <div class="rightlow">
       <el-amap vid="amap" :plugin="plugin" class="amap-demo" :center="center">
@@ -10,9 +11,17 @@
 </template>
 
 <script>
+import Product from "../../../components/product";
+
 export default {
+  components: {
+    Product
+  },
   data() {
     return {
+      data: {
+        title: "线路总览"
+      },
       center: [106.502494, 29.625813],
       lng: 0,
       lat: 0,
@@ -41,17 +50,17 @@ export default {
 <style scoped>
 .title {
   font-size: 44px;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-left: 30px;
 }
 .line {
   border-bottom: 1px solid #000;
-  margin: 10px 30px;
+  margin: -30px 30px;
 }
 .rightlow {
   margin: 10px 30px;
   box-shadow: 0 0 8px gray;
   height: 800px;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 </style>

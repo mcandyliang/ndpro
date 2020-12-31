@@ -1,17 +1,6 @@
 <template>
   <div>
-    <p class="title">信通电子</p>
-    <div class="top">
-      <div>
-        <p>线路列表</p>
-      </div>
-      <div>
-        <p>杆塔列表</p>
-      </div>
-      <div>
-        <p>向平台同步设备</p>
-      </div>
-    </div>
+    <product :data="data" />
     <div class="table-box">
       <el-table
         ref="multipleTable"
@@ -19,46 +8,58 @@
         tooltip-effect="dark"
         style="width: 100%"
         :header-cell-style="{ background: '#CFEEFD', color: '#000' }"
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column prop="id" label="设备ID"> </el-table-column>
-        <el-table-column prop="name" label="设备名称"> </el-table-column>
-        <el-table-column prop="bm" label="部门"> </el-table-column>
-        <el-table-column prop="type" label="设备类型"> </el-table-column>
-        <el-table-column prop="detail" label="设备详细信息"> </el-table-column>
-        <el-table-column prop="set" label="设置当前配置"> </el-table-column>
+        <el-table-column prop="deviceID" label="设备ID" width="300">
+        </el-table-column>
+        <el-table-column prop="deviceName" label="设备名称"> </el-table-column>
+        <el-table-column prop="wxdepartname" label="部门"> </el-table-column>
+        <el-table-column prop="deviceType" label="设备类型"> </el-table-column>
+        <el-table-column label="设备详细信息">
+          <el-button>设备详细信息</el-button>
+        </el-table-column>
+        <el-table-column label="设置当前配置">
+          <el-button>当前配置</el-button></el-table-column
+        >
       </el-table>
     </div>
   </div>
 </template>
 
 <script>
+import Product from "../../../components/product";
 export default {
+  components: {
+    Product
+  },
   data() {
     return {
-      tableData: [
-        {
-          id: "A50E2710-11EA-B757-0143992F1D2C",
-          name: "110KV临西线49号 庆元",
-          bm: "锡林郭勒电业局输电处",
-          type: "图像",
-          detail: "设备详细信息",
-          set: "当前配置"
-        },
-        {
-          id: "A50E2710-11EA-B757-0143992F1D2C",
-          name: "110KV临西线49号 庆元",
-          bm: "锡林郭勒电业局输电处",
-          type: "图像",
-          detail: "设备详细信息",
-          set: "当前配置"
-        }
-      ]
+      data: {
+        title: "信通电子",
+        subtext: ["线路列表", "杆塔列表", "向平台同步设备"],
+        total: 2
+      },
+      tableData: [],
+      departID: "1/"
     };
   },
+  mounted() {
+    this.getData();
+  },
   methods: {
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    getData() {
+      this.$post("/api/v2/device/devicelist-xintong", {
+        page: this.page,
+        pageSize: this.pageSize,
+        departID: this.departID
+      }).then(res => {
+        // console.log(res);
+        this.tableData = res.data.data.list;
+        res.data.data.list.forEach(item => {
+          if (item.deviceType == 0) {
+            item.deviceType = "图像";
+          }
+        });
+      });
     }
   }
 };

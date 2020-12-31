@@ -1,32 +1,56 @@
-import Vue from 'vue'
+import Vue from "vue";
 
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
+import "normalize.css/normalize.css"; // A modern alternative to CSS resets
 
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+import locale from "element-ui/lib/locale/lang/zh-CN"; // lang i18n
 
-import '@/styles/index.scss' // global css
+import "@/styles/index.scss"; // global css
 
-import echarts from 'echarts'
-import App from './App'
-import store from './store'
-import router from './router'
-import AMap from 'vue-amap'
-import '@/icons' // icon
-import '@/permission' // permission control
-import axios from 'axios'
-axios.defaults.baseURL = 'http://ual8iz2t23.52http.net'
-axios.interceptors.request.use(config => {
-  config.headers.Authorization = localStorage.getItem('token')
-  return config
-})
-Vue.prototype.$http = axios
+import echarts from "echarts";
+import App from "./App";
+import store from "./store";
+import router from "./router";
+import AMap from "vue-amap";
+import "@/icons"; // icon
+import "@/permission"; // permission control
+import axios from "axios";
+import Qs from "qs";
+// axios.defaults.baseURL = 'http://192.168.1.7:3000'
+Vue.prototype.baseUrl = "http://192.168.1.20:3000";
+Vue.prototype.$get = function(api, data) {
+  if (data === undefined) {
+    data = {};
+  }
+  var ox = axios.get(this.baseUrl + api, { params: data });
+  return ox;
+};
+Vue.prototype.$post = function(api, data) {
+  data = Qs.stringify(data);
+  var ox = axios.post(this.baseUrl + api, data);
+  return ox;
+};
+const token = "111";
+
+// axios.defaults.headers['authorization'] = token;
+
 Vue.use(AMap);
-Vue.prototype.$eacharts = echarts
+Vue.prototype.$eacharts = echarts;
 AMap.initAMapApiLoader({
-  key: '0c3cef4b333aa2918685e4a0d4559f68',
-  plugin: ['AMap.Geolocation']
+  key: "0c3cef4b333aa2918685e4a0d4559f68",
+  plugin: [
+    "AMap.Autocomplete", //输入提示插件
+    "AMap.PlaceSearch", //POI搜索插件
+    "AMap.Scale", //右下角缩略图插件 比例尺
+    "AMap.OverView", //地图鹰眼插件
+    "AMap.ToolBar", //地图工具条
+    "AMap.MapType", //类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+    "AMap.PolyEditor", //编辑 折线多，边形
+    "AMap.CircleEditor", //圆形编辑器插件
+    "AMap.Geolocation", //定位控件，用来获取和展示用户主机所在的经纬度位置
+    "AMap.ControlBar"
+  ]
 });
 /**
  * If you don't want to use mock-server
@@ -36,21 +60,21 @@ AMap.initAMapApiLoader({
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
+if (process.env.NODE_ENV === "production") {
+  const { mockXHR } = require("../mock");
+  mockXHR();
 }
 
 // set ElementUI lang to EN
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, { locale });
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-  el: '#app',
+  el: "#app",
   router,
   store,
   render: h => h(App)
-})
+});

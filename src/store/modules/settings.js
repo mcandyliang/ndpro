@@ -1,11 +1,12 @@
 import defaultSettings from '@/settings'
 
-const { showSettings, fixedHeader, sidebarLogo } = defaultSettings
+const { showSettings, fixedHeader, sidebarLogo,token } = defaultSettings
 
 const state = {
   showSettings: showSettings,
   fixedHeader: fixedHeader,
-  sidebarLogo: sidebarLogo
+  sidebarLogo: sidebarLogo,
+  token:'X-CSRF-TOKEN'
 }
 
 const mutations = {

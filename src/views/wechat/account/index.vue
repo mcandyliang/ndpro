@@ -8,13 +8,27 @@
         label-width="80px"
         :model="formLabelAlign"
       >
-        <el-form-item label="姓名:"> </el-form-item>
-        <el-form-item label="备注:"> </el-form-item>
-        <el-form-item label="所在区域:"> </el-form-item>
-        <el-form-item label="ID:"> </el-form-item>
-        <el-form-item label="手机号码:"> </el-form-item>
-        <el-form-item label="身份证号:"> </el-form-item>
-        <el-form-item label="密码:"> </el-form-item>
+        <el-form-item label="姓名:">
+          <el-input style="width:30%" v-model="formLabelAlign.name"></el-input>
+        </el-form-item>
+        <el-form-item label="备注:">
+          <el-input style="width:30%" v-model="formLabelAlign.name"></el-input>
+        </el-form-item>
+        <el-form-item label="所在区域:">
+          <el-input style="width:30%" v-model="formLabelAlign.name"></el-input>
+        </el-form-item>
+        <el-form-item label="ID:">
+          <el-input style="width:30%" v-model="formLabelAlign.name"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码:">
+          <el-input style="width:30%" v-model="formLabelAlign.name"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号:">
+          <el-input style="width:30%" v-model="formLabelAlign.name"></el-input>
+        </el-form-item>
+        <el-form-item label="密码:">
+          <el-input style="width:30%" v-model="formLabelAlign.name"></el-input>
+        </el-form-item>
       </el-form>
       <el-button type="warning">保存</el-button>
     </div>
@@ -26,7 +40,9 @@ export default {
   data() {
     return {
       labelPosition: "right",
-      formLabelAlign: {}
+      formLabelAlign: {
+        name: ""
+      }
     };
   }
 };

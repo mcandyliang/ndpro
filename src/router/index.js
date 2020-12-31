@@ -79,12 +79,7 @@ export const constantRoutes = [
         component: () => import('@/views/device/visual/index'),
         meta: { title: '全塔可视化巡检设备管理'}
       },
-      {
-        path: 'video',
-        name: 'Videos',
-        component: () => import('@/views/device/video/index'),
-        meta: { title: '视频监控账号管理'}
-      },
+      
       {
         path: 'electronics',
         name: 'Electronics',
@@ -119,12 +114,7 @@ export const constantRoutes = [
     name: 'Wechat',
     meta: { title: '微信管理', icon: 'el-icon-chat-dot-round' },
     children: [
-      {
-        path: 'province',
-        name: 'Province',
-        component: () => import('@/views/wechat/province/index'),
-        meta: { title: '绑定省份'}
-      },
+      
       {
         path: 'account',
         name: 'Account',

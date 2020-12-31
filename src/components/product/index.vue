@@ -81,9 +81,9 @@ export default {
 }
 .title {
   font-size: 40px;
-  margin-top: 40px;
+  margin-top: 15px;
   margin-left: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 .top {
   margin: -10px 30px;
@@ -119,7 +119,7 @@ export default {
 .search {
   width: 280px;
   float: right;
-  margin: 25px 30px;
+  margin: 25px 30px 0 0;
   height: 50px;
 }
 .date {
