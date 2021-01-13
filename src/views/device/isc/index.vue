@@ -15,7 +15,9 @@
         <div @click="photo">
           <p>抓图模块</p>
         </div>
-
+        <div @click="add">
+          <p>批量转移</p>
+        </div>
         <div @click="updates">
           <p>更新设备</p>
         </div>
@@ -92,7 +94,7 @@
       <div>
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="Newitem"
           tooltip-effect="dark"
           style="width: 100%"
           border
@@ -298,7 +300,11 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="plan(scope.row)"
+              <el-button
+                size="mini"
+                type="primary"
+                style="margin-right:7px"
+                @click="plan(scope.row)"
                 >抓图计划</el-button
               >
 
@@ -494,7 +500,9 @@ export default {
   updated() {
     this.createMap();
   },
+
   methods: {
+    add() {},
     updates() {
       this.$post("/api/v2/isc/updateCameraList").then(res => {
         if (res.data.code == 200) {
@@ -813,6 +821,25 @@ export default {
         this.tableData = res.data.data.list;
         this.total = res.data.data.total;
       });
+    }
+  },
+  computed: {
+    Newitem() {
+      var _this = this;
+      var Newitem = [];
+      var tableData = _this.tableData;
+      tableData.map(function(item) {
+        if (
+          item.deviceSerial.search(_this.input3) != -1 ||
+          item.cameraIndexCode.search(_this.input3) != -1 ||
+          item.cameraName.search(_this.input3) != -1 ||
+          item.smsNum.search(_this.input3) != -1 ||
+          item.wxdepartname.search(_this.input3) != -1
+        ) {
+          Newitem.push(item);
+        }
+      });
+      return Newitem;
     }
   }
 };

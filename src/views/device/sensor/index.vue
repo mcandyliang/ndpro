@@ -13,14 +13,25 @@
         </el-input>
       </div>
       <div class="middle">
-        <div>
-          <p>添加传感器</p>
+        <div @click="add">
+          <p>批量转移</p>
         </div>
       </div>
+      <el-dialog title="请选择部门" :visible.sync="dgVisible">
+        <el-tree
+          :data="data"
+          :props="defaultProps"
+          @node-click="handleNodeClick"
+        ></el-tree>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dgVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dgVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
       <div>
         <el-table
           ref="multipleTable"
-          :data="tableData"
+          :data="Newitem"
           tooltip-effect="dark"
           style="width: 100%"
           border
@@ -165,7 +176,7 @@
           <el-table-column prop="deviceName" label="设备名称">
             <template slot-scope="scope">
               <span v-if="scope.row.deviceName == ''">
-                <el-button type="text" @click="binding(scope.row)"
+                <el-button type="text" @click="binding(scope.row, scope.$index)"
                   >无</el-button
                 >
               </span>
@@ -179,26 +190,25 @@
                 :visible.sync="dialogVisible"
                 style="text-align:left"
               >
-                设备名称：<el-radio-group v-model="checkdevicename">
+                <el-input
+                  placeholder="搜索序列号或设备名称"
+                  v-model="search"
+                  style="margin-top:-10px;margin-bottom:10px"
+                ></el-input>
+                <el-radio-group v-model="checkdevice">
                   <el-radio-button
-                    v-for="(deviceName, i) in devicename"
-                    :label="deviceName"
+                    v-for="(item, i) in Newitems"
+                    :label="item"
                     :key="i"
-                    >{{ deviceName }}</el-radio-button
+                    >设备名称:{{ item.deviceName }},设备序列号:{{
+                      item.deviceSerial
+                    }}</el-radio-button
                   >
                 </el-radio-group>
-                <br /><br />
-                设备序列号：<el-radio-group v-model="checkdeviceserial">
-                  <el-radio-button
-                    v-for="(serial, i) in deviceserial"
-                    :label="serial"
-                    :key="i"
-                    >{{ serial }}</el-radio-button
-                  >
-                </el-radio-group>
+
                 <div slot="footer" class="dialog-footer">
                   <el-button @click="dialogVisible = false">取 消</el-button>
-                  <el-button type="primary">确 定</el-button>
+                  <el-button type="primary" @click="refer">确 定</el-button>
                 </div>
               </el-dialog>
             </template>
@@ -267,12 +277,14 @@
                   <el-button @click="dialogFormVisibless = false"
                     >取 消</el-button
                   >
-                  <el-button type="primary" @click="submit(scope.row)"
-                    >确 定</el-button
-                  >
+                  <el-button type="primary" @click="submit">确 定</el-button>
                 </div>
               </el-dialog>
-              <el-button type="primary" size="mini" style="margin-left:7px"
+              <el-button
+                type="primary"
+                size="mini"
+                style="margin-left:7px"
+                @click="record(scope.row)"
                 >记录</el-button
               >
               <el-button
@@ -282,6 +294,7 @@
                 style="margin-right:7px"
                 >封面</el-button
               >
+
               <el-dialog
                 title="上传封面"
                 :visible.sync="dialogFormVisiblesss"
@@ -314,14 +327,38 @@
               <el-button
                 type="primary"
                 size="mini"
-                @click="unbundling(scope.row)"
+                @click="unbundling(scope.row, scope.$index)"
                 >解绑</el-button
               >
-              <el-button type="danger" size="mini">删除</el-button>
+              <!-- <el-button type="danger" size="mini">删除</el-button> -->
             </template>
           </el-table-column>
         </el-table>
       </div>
+      <el-dialog title="设备杆塔倾斜历史记录" :visible.sync="dialogVisibles">
+        <div v-loading="loading">
+          <div id="echarts"></div>
+
+          <el-date-picker
+            v-model="value1"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="timestamp"
+            style="margin:50px 0 0 215px;"
+          >
+          </el-date-picker>
+
+          <el-button type="primary" @click="searchs">查询</el-button>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisibles = false">取 消</el-button>
+          <el-button @click="dialogVisibles = false" type="primary"
+            >确 定</el-button
+          >
+        </div>
+      </el-dialog>
       <div class="page">
         <el-pagination
           background
@@ -336,16 +373,24 @@
 </template>
 
 <script>
+import { construct, destruct } from "@aximario/json-tree";
 export default {
   data() {
     return {
+      data: [],
+      defaultProps: {
+        children: "children",
+        label: "departName"
+      },
       input3: "",
       tableData: [],
       departID: "1/",
       page: 1,
       pageSize: 10,
       total: 0,
+      dgVisible: false,
       dialogVisible: false,
+      dialogVisibles: false,
       dialogFormVisible: false,
       dialogFormVisibles: false,
       dialogFormVisibless: false,
@@ -367,34 +412,298 @@ export default {
       x: "",
       y: "",
       val: {},
+      vals: {},
+      valss: {},
       value: {},
       index: 0,
+      indexs: 0,
+      multipleSelection: "",
       src: "",
       action: "",
       fileList: [],
-      devicename: [],
-      checkdevicename: "",
-      deviceserial: [],
-      checkdeviceserial: ""
+      checkdevice: "",
+      search: "",
+      datalist: [],
+      value1: "",
+      loading: true
     };
   },
-
   created() {
     this.getData();
   },
   methods: {
-    binding(val) {
+    handleNodeClick(data) {
+      // console.log(data);
+    },
+    getListData(data, config) {
+      var id = config.id || "departID";
+      var pid = config.pid || "pid";
+      var children = config.children || "children";
+      // var label=config.label || 'LctnName';
+      var idMap = {};
+      var jsonTree = [];
+      // this.data = data;
+      data.forEach(function(v) {
+        idMap[v[id]] = v;
+      });
+      data.forEach(function(v) {
+        var parent = idMap[v[pid]];
+        if (parent) {
+          !parent[children] && (parent[children] = []);
+          parent[children].push(v);
+        } else {
+          jsonTree.push(v);
+        }
+      });
+      console.log(data);
+      console.log(123);
+      return;
+
+      // console.log(data);
+    },
+    searchs() {
+      echarts.init(document.getElementById("echarts")).dispose();
+      this.loading = true;
+      let start = this.value1[0];
+      let end = this.value1[1];
+      let power_data = [];
+      let x_data = [];
+      let y_data = [];
+      let time_data = [];
+      this.$post("/api/v2/sensor/get-data", {
+        sensorID: this.valss.sensorID,
+        start: start,
+        end: end
+      }).then(res => {
+        // console.log(res);
+        res.data.data.power_data.forEach(item => {
+          power_data.push(item[1]);
+          var hours = parseInt(
+            (item[0] % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          var minutes = parseInt((item[0] % (1000 * 60 * 60)) / (1000 * 60));
+          var time =
+            (hours < 10 ? "0" + hours : hours) +
+            ":" +
+            (minutes < 10 ? "0" + minutes : minutes);
+          time_data.push(time);
+        });
+        res.data.data.x_data.forEach(item => {
+          x_data.push(item[1]);
+        });
+        res.data.data.y_data.forEach(item => {
+          y_data.push(item[1]);
+        });
+        var myCharts = echarts.init(document.getElementById("echarts"));
+        var option = {
+          title: {
+            text: "杆塔倾斜历史记录"
+          },
+          tooltip: {
+            trigger: "axis"
+          },
+          legend: {
+            data: ["X轴", "Y轴", "电量"],
+            selected: {
+              X轴: true,
+              Y轴: true,
+              电量: false
+            }
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "category",
+            boundaryGap: false,
+            data: time_data
+          },
+          yAxis: {},
+          series: [
+            {
+              name: "X轴",
+              type: "line",
+              stack: "X轴倾斜度",
+              data: x_data
+            },
+            {
+              name: "Y轴",
+              type: "line",
+              stack: "Y轴倾斜度",
+              data: y_data
+            },
+            {
+              name: "电量",
+              type: "line",
+              stack: "电量",
+              data: power_data
+            }
+          ]
+        };
+        myCharts.setOption(option);
+        this.loading = false;
+      });
+    },
+    record(val) {
+      if (this.dialogVisibles == false) {
+        this.loading = true;
+      }
+      this.dialogVisibles = true;
+      this.valss = val;
+      // let loadingInstance = Loading.service(options);
+      let start = Date.parse(new Date()) - 3600000;
+      let end = Date.parse(new Date());
       // console.log(val);
+      let power_data = [];
+      let x_data = [];
+      let y_data = [];
+      let time_data = [];
+      this.$post("/api/v2/sensor/get-data", {
+        sensorID: val.sensorID,
+        start: start,
+        end: end
+      }).then(res => {
+        // console.log(res);
+        res.data.data.power_data.forEach(item => {
+          power_data.push(item[1]);
+
+          var hours = parseInt(
+            (item[0] % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          var minutes = parseInt((item[0] % (1000 * 60 * 60)) / (1000 * 60));
+
+          var time =
+            (hours < 10 ? "0" + hours : hours) +
+            ":" +
+            (minutes < 10 ? "0" + minutes : minutes);
+
+          time_data.push(time);
+        });
+        res.data.data.x_data.forEach(item => {
+          x_data.push(item[1]);
+        });
+        res.data.data.y_data.forEach(item => {
+          y_data.push(item[1]);
+        });
+        var myCharts = echarts.init(document.getElementById("echarts"));
+        var option = {
+          title: {
+            text: "杆塔倾斜历史记录"
+          },
+          tooltip: {
+            trigger: "axis"
+          },
+          legend: {
+            data: ["X轴", "Y轴", "电量"],
+            selected: {
+              X轴: true,
+              Y轴: true,
+              电量: false
+            }
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+
+          xAxis: {
+            type: "category",
+            boundaryGap: false,
+            data: time_data
+          },
+          yAxis: {},
+          series: [
+            {
+              name: "X轴",
+              type: "line",
+              stack: "X轴倾斜度",
+              data: x_data
+            },
+            {
+              name: "Y轴",
+              type: "line",
+              stack: "Y轴倾斜度",
+              data: y_data
+            },
+            {
+              name: "电量",
+              type: "line",
+              stack: "电量",
+              data: power_data
+            }
+          ]
+        };
+
+        myCharts.setOption(option);
+        this.loading = false;
+      });
+    },
+    add() {
+      if (this.multipleSelection == "") {
+        this.$message({
+          message: "请选择需要转移的数据",
+          type: "warning"
+        });
+      } else {
+        this.dgVisible = true;
+        this.$post("/api/v2/depart/get-departlist", {
+          departID: this.departID
+        }).then(res => {
+          // this.data = res.data.data.list;
+          const data = res.data.data.list;
+          for (var i = 0; i < data.length; i++) {
+            var str = data[i].departID;
+            data[i].pid = str.substr(
+              0,
+              str.lastIndexOf("/", str.lastIndexOf("/") - 1) + 1
+            );
+            if (data[i].departID == "1/") {
+              data[i].pid = "1/";
+            }
+            // return data;
+          }
+          this.getListData(data, {
+            id: "departID",
+            pid: "pid",
+            children: "children"
+          });
+        });
+      }
+    },
+    refer() {
+      // console.log(this.checkdevice);
+      // console.log(this.vals);
+      this.$post("/api/v2/sensor/device-bind-sub", {
+        sensorID: this.vals.sensorID,
+        deviceSerial: this.checkdevice.deviceSerial
+      }).then(res => {
+        // console.log(res);
+      });
+      this.tableData[this.indexs].deviceName = this.checkdevice.deviceName;
+      this.tableData[this.indexs].deviceSerial = this.checkdevice.deviceSerial;
+      this.tableData[this.indexs].location = this.checkdevice.location;
+      this.dialogVisible = false;
+    },
+    binding(val, index) {
+      // console.log(index);
       this.dialogVisible = true;
+      let length = this.datalist.length;
+      if (length > 0) {
+        this.datalist = [];
+      }
       this.$post("/api/v2/sensor/device-not-bind", {
         departID: val.departID
       }).then(res => {
         // console.log(res);
-        res.data.data.list.forEach(item => {
-          this.devicename.push(item.deviceName);
-          this.deviceserial.push(item.deviceSerial);
-        });
+        this.datalist = res.data.data.list;
       });
+      this.vals = val;
+      this.indexs = index;
     },
     open() {
       this.$message({
@@ -402,25 +711,43 @@ export default {
         type: "warning"
       });
     },
-    unbundling(val) {
-      // console.log(val);
-      this.$confirm(`确定取消与设备${val.sensorName}的绑定`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+    unbundling(val, index) {
+      // console.log(val, index);
+      if (val.deviceName != "") {
+        this.$confirm(`确定取消与设备${val.deviceName}的绑定`, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
+          .then(() => {
+            // console.log(val.sensorID, val.deviceSerial);
+            this.$post("/api/v2/sensor/device-bind-cancel", {
+              sensorID: val.sensorID,
+              deviceSerial: val.deviceSerial
+            }).then(res => {
+              // console.log(res);
+              if (res.data.code == 200) {
+                this.$message({
+                  type: "success",
+                  message: res.data.msg
+                });
+                this.tableData[index].location = res.data.data.location;
+                this.tableData[index].deviceSerial = "";
+                this.tableData[index].deviceName = "";
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消解绑"
+            });
           });
-        });
+      } else {
+        this.$message.error("未绑定设备，无需解绑");
+      }
     },
     success(response, file, fileList) {
       // console.log(response);
@@ -439,7 +766,7 @@ export default {
         this.src = res.data.data.poster;
       });
     },
-    submit(val) {
+    submit() {
       this.$post("/api/v2/sensor/setZero", {
         sensorID: this.value.sensorID,
         x_zero: this.x,
@@ -572,6 +899,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      // console.log(val);
     },
     getData() {
       this.$post("/api/v2/device/devicelist-tower-qx", {
@@ -583,6 +911,40 @@ export default {
         this.total = res.data.data.total;
         this.tableData = res.data.data.list;
       });
+    }
+  },
+  computed: {
+    Newitems() {
+      var _this = this;
+      var Newitems = [];
+      var datalist = _this.datalist;
+      datalist.map(function(item) {
+        if (
+          item.deviceName.search(_this.search) != -1 ||
+          item.deviceSerial.search(_this.search) != -1
+        ) {
+          Newitems.push(item);
+        }
+      });
+      return Newitems;
+    },
+    Newitem() {
+      var _this = this;
+      var Newitem = [];
+      var tableData = _this.tableData;
+      tableData.map(function(item) {
+        if (
+          item.sensorID.search(_this.input3) != -1 ||
+          item.smsNum.search(_this.input3) != -1 ||
+          item.sensorName.search(_this.input3) != -1 ||
+          item.departName.search(_this.input3) != -1 ||
+          item.deviceName.search(_this.input3) != -1 ||
+          item.deviceSerial.search(_this.input3) != -1
+        ) {
+          Newitem.push(item);
+        }
+      });
+      return Newitem;
     }
   }
 };
@@ -633,6 +995,9 @@ export default {
   border-top: 1px solid #666666;
   /* margin: 5px; */
   padding: 10px 0;
+}
+#echarts {
+  height: 200px;
 }
 /deep/.el-table th > .cell {
   text-align: center;

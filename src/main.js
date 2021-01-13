@@ -8,7 +8,7 @@ import locale from "element-ui/lib/locale/lang/zh-CN"; // lang i18n
 
 import "@/styles/index.scss"; // global css
 
-import echarts from "echarts";
+// import echarts from "vue-echarts";
 import App from "./App";
 import store from "./store";
 import router from "./router";
@@ -17,8 +17,9 @@ import "@/icons"; // icon
 import "@/permission"; // permission control
 import axios from "axios";
 import Qs from "qs";
+
 // axios.defaults.baseURL = 'http://192.168.1.7:3000'
-Vue.prototype.baseUrl = "http://192.168.1.20:3000";
+Vue.prototype.baseUrl = "http://192.168.1.13:3000";
 Vue.prototype.$get = function(api, data) {
   if (data === undefined) {
     data = {};
@@ -36,7 +37,7 @@ const token = "111";
 // axios.defaults.headers['authorization'] = token;
 
 Vue.use(AMap);
-Vue.prototype.$eacharts = echarts;
+// Vue.prototype.$echarts = echarts;
 AMap.initAMapApiLoader({
   key: "0c3cef4b333aa2918685e4a0d4559f68",
   plugin: [

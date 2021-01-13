@@ -28,7 +28,7 @@
         ref="multipleTable"
         :row-style="{ height: '20px' }"
         :cell-style="{ padding: '5px' }"
-        :data="tableData"
+        :data="Newitem"
         tooltip-effect="dark"
         style="width: 100%"
         :header-cell-style="{ background: '#CFEEFD', color: '#000' }"
@@ -49,6 +49,14 @@
           </template>
         </el-table-column>
         <el-table-column label="直播视频">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status == 0" style="color:red">
+              <el-button type="primary" :disabled="true">直播</el-button>
+            </span>
+            <span v-else style="color:green">
+              <el-button type="primary">直播</el-button>
+            </span>
+          </template>
           <el-button type="primary" :disabled="line">直播</el-button>
         </el-table-column>
         <el-table-column label="是否开启定位">
@@ -61,7 +69,14 @@
           </template>
         </el-table-column>
         <el-table-column label="实时图像">
-          <el-button type="primary" :disabled="line">实时图像</el-button>
+          <template slot-scope="scope">
+            <span v-if="scope.row.status == 0" style="color:red">
+              <el-button type="primary" :disabled="true">实时图像</el-button>
+            </span>
+            <span v-else style="color:green">
+              <el-button type="primary">实时图像</el-button>
+            </span>
+          </template>
         </el-table-column>
         <el-table-column label="操作">
           <template>
@@ -119,7 +134,7 @@ export default {
       ],
       total: 0,
       input3: "",
-      line: false,
+
       page: 1,
       pageSize: 10,
       departID: "1/"
@@ -146,14 +161,23 @@ export default {
         // console.log(res);
         this.total = res.data.data.total;
         this.tableData = res.data.data.list;
-        res.data.data.list.forEach(item => {
-          if (item.status === 0) {
-            this.line = true;
-          } else {
-            this.line = false;
-          }
-        });
       });
+    }
+  },
+  computed: {
+    Newitem() {
+      var _this = this;
+      var Newitem = [];
+      var tableData = _this.tableData;
+      tableData.map(function(item) {
+        if (
+          item.deviceName.search(_this.input3) != -1 ||
+          item.deviceSerial.search(_this.input3) != -1
+        ) {
+          Newitem.push(item);
+        }
+      });
+      return Newitem;
     }
   }
 };

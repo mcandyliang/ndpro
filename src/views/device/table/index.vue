@@ -26,7 +26,7 @@
     <div class="table-box">
       <el-table
         ref="multipleTable"
-        :data="tableData"
+        :data="Newitem"
         tooltip-effect="dark"
         style="width: 100%"
         :row-style="{ height: '20px' }"
@@ -153,6 +153,27 @@ export default {
         // console.log(res);
         this.tableData = res.data.data.list;
       });
+    }
+  },
+  computed: {
+    Newitem() {
+      var _this = this;
+      var Newitem = [];
+      var tableData = _this.tableData;
+      tableData.map(function(item) {
+        if (
+          item.deviceName.search(_this.input3) != -1 ||
+          item.deviceSerial.search(_this.input3) != -1 ||
+          item.createTime.search(_this.input3) != -1 ||
+          (item.id + "").search(_this.input3) != -1 ||
+          item.lat.search(_this.input3) != -1 ||
+          item.lng.search(_this.input3) != -1 ||
+          item.onlineTime.search(_this.input3) != -1
+        ) {
+          Newitem.push(item);
+        }
+      });
+      return Newitem;
     }
   }
 };
