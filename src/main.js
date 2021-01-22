@@ -19,7 +19,7 @@ import axios from "axios";
 import Qs from "qs";
 
 // axios.defaults.baseURL = 'http://192.168.1.7:3000'
-Vue.prototype.baseUrl = "http://192.168.1.13:3000";
+Vue.prototype.baseUrl = "http://192.168.1.9:3000";
 Vue.prototype.$get = function(api, data) {
   if (data === undefined) {
     data = {};

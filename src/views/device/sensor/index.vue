@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="title">传感器</p>
-    <div class="top"></div>
+    <!-- <div class="top"></div> -->
     <div class="table">
       <div class="search">
         <el-input
@@ -13,9 +13,11 @@
         </el-input>
       </div>
       <div class="middle">
-        <div @click="add">
-          <p>批量转移</p>
-        </div>
+        <el-button type="text" @click="add">
+          <div>
+            <p>批量转移</p>
+          </div></el-button
+        >
       </div>
       <el-dialog title="请选择部门" :visible.sync="dgVisible">
         <el-tree
@@ -435,7 +437,7 @@ export default {
     handleNodeClick(data) {
       // console.log(data);
     },
-    getListData(data, config) {
+    getListData(data, config, cb) {
       var id = config.id || "departID";
       var pid = config.pid || "pid";
       var children = config.children || "children";
@@ -455,9 +457,9 @@ export default {
           jsonTree.push(v);
         }
       });
-      console.log(data);
-      console.log(123);
-      return;
+      // console.log(data);
+      // console.log(123);
+      return data;
 
       // console.log(data);
     },
@@ -663,15 +665,11 @@ export default {
               str.lastIndexOf("/", str.lastIndexOf("/") - 1) + 1
             );
             if (data[i].departID == "1/") {
-              data[i].pid = "1/";
+              data[i].pid = "0";
             }
             // return data;
           }
-          this.getListData(data, {
-            id: "departID",
-            pid: "pid",
-            children: "children"
-          });
+          // console.log(data);
         });
       }
     },
@@ -957,11 +955,7 @@ export default {
   margin-left: 30px;
   margin-bottom: 10px;
 }
-.top {
-  display: flex;
-  border-bottom: 1px solid #666666;
-  margin: 10px 30px;
-}
+
 .table {
   border: 1px solid #666666;
   margin: 10px 30px;
@@ -979,12 +973,12 @@ export default {
 }
 .middle {
   border-bottom: 1px solid #666666;
-  display: flex;
 }
 .middle div {
   background-color: #00479d;
-  margin: 8px;
+  padding: 5px;
   border-radius: 7px;
+  margin-left: 10px;
 }
 .middle p {
   color: #fff;

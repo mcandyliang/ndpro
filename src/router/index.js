@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from "@/layout";
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -32,419 +32,506 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
+    path: "/login",
+    component: () => import("@/views/login/index"),
     hidden: true
   },
 
   {
-    path: '/404',
-    component: () => import('@/views/404'),
+    path: "/404",
+    component: () => import("@/views/404"),
     hidden: true
   },
 
   {
-    path: '/',
+    path: "/",
     component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-    }]
-  },
-
-  {
-    path: '/device',
-    component: Layout,
-    redirect: '/device/table',
-    name: 'device',
-    meta: { title: '设备管理', icon: 'el-icon-document-copy' },
+    redirect: "/dashboard",
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/device/table/index'),
-        meta: { title: '杆塔倾斜设备管理'}
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/device/tree/index'),
-        meta: { title: '综合在线监测设备管理'}
-      },
-      {
-        path: 'visual',
-        name: 'Visual',
-        component: () => import('@/views/device/visual/index'),
-        meta: { title: '全塔可视化巡检设备管理'}
-      },
-      
-      {
-        path: 'electronics',
-        name: 'Electronics',
-        component: () => import('@/views/device/electronics/index'),
-        meta: { title: '信通电子'}
-      },
-      {
-        path: 'location',
-        name: 'Location',
-        component: () => import('@/views/device/location/index'),
-        meta: { title: '北斗定位'}
-      },
-      {
-        path: 'sensor',
-        name: 'Sensor',
-        component: () => import('@/views/device/sensor/index'),
-        meta: { title: '传感器'}
-      },
-      {
-        path: 'isc',
-        name: 'Isc',
-        component: () => import('@/views/device/isc/index'),
-        meta: { title: 'ISC平台设备'}
+        path: "dashboard",
+        name: "Dashboard",
+        component: () => import("@/views/dashboard/index")
       }
     ]
   },
 
   {
-    path: '/wechat',
+    path: "/device",
     component: Layout,
-    redirect: '/wechat/menu1',
-    name: 'Wechat',
-    meta: { title: '微信管理', icon: 'el-icon-chat-dot-round' },
+    redirect: "/device/table",
+    name: "device",
+    meta: { title: "设备管理", icon: "el-icon-document-copy" },
     children: [
-      
       {
-        path: 'account',
-        name: 'Account',
-        component: () => import('@/views/wechat/account/index'),
-        meta: { title: '账户'}
+        path: "table",
+        name: "Table",
+        component: () => import("@/views/device/table/index"),
+        meta: { title: "杆塔倾斜设备管理" }
       },
       {
-        path: 'user',
-        name: 'User',
-        component: () => import('@/views/wechat/user/index'),
-        meta: { title: '用户管理'}
+        path: "tree",
+        name: "Tree",
+        component: () => import("@/views/device/tree/index"),
+        meta: { title: "综合在线监测设备管理" }
       },
       {
-        path: 'sim',
-        name: 'Sim',
-        component: () => import('@/views/wechat/sim/index'),
-        meta: { title: 'SIM卡管理'}
+        path: "visual",
+        name: "Visual",
+        component: () => import("@/views/device/visual/index"),
+        meta: { title: "全塔可视化巡检设备管理" }
       },
+
+      {
+        path: "electronics",
+        name: "Electronics",
+        component: () => import("@/views/device/electronics/index"),
+        meta: { title: "信通电子" }
+      },
+      {
+        path: "location",
+        name: "Location",
+        component: () => import("@/views/device/location/index"),
+        meta: { title: "北斗定位" }
+      },
+      {
+        path: "sensor",
+        name: "Sensor",
+        component: () => import("@/views/device/sensor/index"),
+        meta: { title: "传感器" }
+      },
+      {
+        path: "isc",
+        name: "Isc",
+        component: () => import("@/views/device/isc/index"),
+        meta: { title: "ISC平台设备" }
+      }
     ]
   },
 
   {
-    path: '/configure',
+    path: "/wechat",
     component: Layout,
-    redirect: '/configure/params',
-    name: 'Configure',
+    redirect: "/wechat/menu1",
+    name: "Wechat",
+    meta: { title: "微信管理", icon: "el-icon-chat-dot-round" },
+    children: [
+      {
+        path: "account",
+        name: "Account",
+        component: () => import("@/views/wechat/account/index"),
+        meta: { title: "账户" }
+      },
+      {
+        path: "user",
+        name: "User",
+        component: () => import("@/views/wechat/user/index"),
+        meta: { title: "用户管理" }
+      },
+      {
+        path: "sim",
+        name: "Sim",
+        component: () => import("@/views/wechat/sim/index"),
+        meta: { title: "SIM卡管理" }
+      }
+    ]
+  },
+
+  {
+    path: "/configure",
+    component: Layout,
+    redirect: "/configure/params",
+    name: "Configure",
     meta: {
-      title: '全局配置',
-      icon: 'el-icon-aim'
+      title: "全局配置",
+      icon: "el-icon-aim"
     },
     children: [
       {
-        path: 'params',
-        component: () => import('@/views/configure/params/index'), 
-        name: 'Params',
-        meta: { title: '全局参数' },
+        path: "params",
+        component: () => import("@/views/configure/params/index"),
+        name: "Params",
+        meta: { title: "全局参数" }
       },
       {
-        path: 'upgrade',
-        component: () => import('@/views/configure/upgrade/index'),
-        name: 'Upgrade',
-        meta: { title: '远程升级' }
+        path: "upgrade",
+        component: () => import("@/views/configure/upgrade/index"),
+        name: "Upgrade",
+        meta: { title: "远程升级" }
       },
       {
-        path: 'data',
-        component: () => import('@/views/configure/data/index'),
-        name: 'Data',
-        meta: { title: '数据同步' }
-      },{
-        path: 'maintain',
-        component: () => import('@/views/configure/maintain/index'),
-        name: 'Maintain',
-        meta: { title: '设备维护' }
+        path: "data",
+        component: () => import("@/views/configure/data/index"),
+        name: "Data",
+        meta: { title: "数据同步" }
+      },
+      {
+        path: "maintain",
+        component: () => import("@/views/configure/maintain/index"),
+        name: "Maintain",
+        meta: { title: "设备维护" }
       }
     ]
   },
   {
-    path: '/manage',
+    path: "/manage",
     component: Layout,
-    redirect: '/manage/standing',
-    name: 'Manages',
+    redirect: "/manage/standing",
+    name: "Manages",
     meta: {
-      title: '台账管理',
-      icon: 'el-icon-film'
+      title: "台账管理",
+      icon: "el-icon-film"
     },
     children: [
       {
-        path: 'standing',
-        component: () => import('@/views/manage/standing/index'), 
-        name: 'Standing',
-        meta: { title: '台账管理' },
+        path: "standing",
+        component: () => import("@/views/manage/standing/index"),
+        name: "Standing",
+        meta: { title: "台账管理" }
       }
     ]
   },
   {
-    path: '/journal',
+    path: "/journal",
     component: Layout,
-    redirect: '/journal/manage',
-    name: 'Journal',
+    redirect: "/journal/manage",
+    name: "Journal",
     meta: {
-      title: '日志查询',
-      icon: 'el-icon-document'
+      title: "日志查询",
+      icon: "el-icon-document"
     },
     children: [
       {
-        path: 'image',
-        component: () => import('@/views/journal/image/index'), 
-        name: 'Image',
-        meta: { title: '图像监测设备日志' },
+        path: "image",
+        component: () => import("@/views/journal/image/index"),
+        name: "Image",
+        meta: { title: "图像监测设备日志" }
       },
       {
-        path: 'video',
-        component: () => import('@/views/journal/video/index'), 
-        name: 'Video',
-        meta: { title: '视频监测设备日志' },
+        path: "video",
+        component: () => import("@/views/journal/video/index"),
+        name: "Video",
+        meta: { title: "视频监测设备日志" }
       },
       {
-        path: 'system',
-        component: () => import('@/views/journal/system/index'), 
-        name: 'Systems',
-        meta: { title: '系统日志' },
+        path: "system",
+        component: () => import("@/views/journal/system/index"),
+        name: "Systems",
+        meta: { title: "系统日志" }
       },
       {
-        path: 'heartbeat',
-        component: () => import('@/views/journal/heartbeat/index'), 
-        name: 'Heartbeat',
-        meta: { title: '心跳日志' },
+        path: "heartbeat",
+        component: () => import("@/views/journal/heartbeat/index"),
+        name: "Heartbeat",
+        meta: { title: "心跳日志" }
       },
       {
-        path: 'letter',
-        component: () => import('@/views/journal/letter/index'), 
-        name: 'Letter',
-        meta: { title: '信通设备日志' },
+        path: "letter",
+        component: () => import("@/views/journal/letter/index"),
+        name: "Letter",
+        meta: { title: "信通设备日志" }
       },
       {
-        path: 'report',
-        component: () => import('@/views/journal/report/index'), 
-        name: 'Report',
-        meta: { title: '报警统计' },
+        path: "report",
+        component: () => import("@/views/journal/report/index"),
+        name: "Report",
+        meta: { title: "报警统计" }
       },
       {
-        path: 'month',
-        component: () => import('@/views/journal/month/index'), 
-        name: 'Month',
-        meta: { title: '月报表' },
+        path: "month",
+        component: () => import("@/views/journal/month/index"),
+        name: "Month",
+        meta: { title: "月报表" }
       },
       {
-        path: 'alarm',
-        component: () => import('@/views/journal/alarm/index'), 
-        name: 'Alarm',
-        meta: { title: '告警系统' },
+        path: "alarm",
+        component: () => import("@/views/journal/alarm/index"),
+        name: "Alarm",
+        meta: { title: "告警系统" }
       }
     ]
   },
   {
-    path: '/geography',
+    path: "/geography",
     component: Layout,
-    redirect: '/geography/line',
-    name: 'Geography',
+    redirect: "/geography/line",
+    name: "Geography",
     meta: {
-      title: '地理信息',
-      icon: 'el-icon-map-location'
+      title: "地理信息",
+      icon: "el-icon-map-location"
     },
     children: [
       {
-        path: 'line',
-        component: () => import('@/views/geography/line/index'), 
-        name: 'Line',
-        meta: { title: '地理信息' },
+        path: "line",
+        component: () => import("@/views/geography/line/index"),
+        name: "Line",
+        meta: { title: "地理信息" }
       }
     ]
   },
   {
-    path: '/now',
+    path: "/now",
     component: Layout,
-    redirect: '/now/scene',
-    name: 'Now',
+    redirect: "/now/scene",
+    name: "Now",
     meta: {
-      title: '实时现场',
-      icon: 'el-icon-school'
+      title: "实时现场",
+      icon: "el-icon-school"
     },
     children: [
       {
-        path: 'scene',
-        component: () => import('@/views/now/scene/index'), 
-        name: 'Scene',
-        meta: { title: '实时现场' },
+        path: "scene",
+        component: () => import("@/views/now/scene/index"),
+        name: "Scene",
+        meta: { title: "实时现场" }
       }
     ]
   },
   {
-    path: '/form',
+    path: "/form",
     component: Layout,
-    redirect: '/form/statistics',
-    name: 'Form',
+    redirect: "/form/statistics",
+    name: "Form",
     meta: {
-      title: '报表',
-      icon: 'el-icon-tickets'
+      title: "报表",
+      icon: "el-icon-tickets"
     },
     children: [
       {
-        path: 'statistics',
-        component: () => import('@/views/form/statistics/index'), 
-        name: 'Statistics',
-        meta: { title: '统计报表' },
+        path: "statistics",
+        component: () => import("@/views/form/statistics/index"),
+        name: "Statistics",
+        meta: { title: "统计报表" }
       },
       {
-        path: 'details',
-        component: () => import('@/views/form/details/index'), 
-        name: 'Details',
-        meta: { title: '详细列表' },
+        path: "details",
+        component: () => import("@/views/form/details/index"),
+        name: "Details",
+        meta: { title: "详细列表" }
       }
     ]
   },
   {
-    path: '/system',
+    path: "/system",
     component: Layout,
-    redirect: '/system/login',
-    name: 'System',
+    redirect: "/system/login",
+    name: "System",
     meta: {
-      title: '系统登录',
-      icon: 'el-icon-s-platform'
+      title: "系统登录",
+      icon: "el-icon-s-platform"
     },
     children: [
       {
-        path: 'login',
-        component: () => import('@/views/system/login/index'), 
-        name: 'Login',
-        meta: { title: '系统登录' },
+        path: "login",
+        component: () => import("@/views/system/login/index"),
+        name: "Login",
+        meta: { title: "系统登录" }
       }
     ]
   },
   {
-    path: '/app',
+    path: "/app",
     component: Layout,
-    redirect: '/app/edition',
-    name: 'APP',
+    redirect: "/app/edition",
+    name: "APP",
     meta: {
-      title: 'APP版本',
-      icon: 'el-icon-mobile'
+      title: "APP版本",
+      icon: "el-icon-mobile"
     },
     children: [
       {
-        path: 'edition',
-        component: () => import('@/views/app/edition/index'), 
-        name: 'Edition',
-        meta: { title: 'APP版本' },
+        path: "edition",
+        component: () => import("@/views/app/edition/index"),
+        name: "Edition",
+        meta: { title: "APP版本" }
       }
     ]
   },
   {
-    path: '/test',
+    path: "/test",
     component: Layout,
-    redirect: '/test/question',
-    name: 'Test',
+    redirect: "/test/question",
+    name: "Test",
     meta: {
-      title: '考试系统',
-      icon: 'el-icon-notebook-2'
+      title: "考试系统",
+      icon: "el-icon-notebook-2"
     },
     children: [
       {
-        path: 'question',
-        component: () => import('@/views/test/question/index'), 
-        name: 'Question',
-        meta: { title: '题库管理' },
+        path: "question",
+        component: () => import("@/views/test/question/index"),
+        name: "Question",
+        meta: { title: "题库管理" }
       },
       {
-        path: 'achievement',
-        component: () => import('@/views/test/achievement/index'), 
-        name: 'Achievement',
-        meta: { title: '成绩管理' },
+        path: "achievement",
+        component: () => import("@/views/test/achievement/index"),
+        name: "Achievement",
+        meta: { title: "成绩管理" }
       },
       {
-        path: 'major',
-        component: () => import('@/views/test/major/index'), 
-        name: 'Qajor',
-        meta: { title: '专业管理' },
+        path: "major",
+        component: () => import("@/views/test/major/index"),
+        name: "Qajor",
+        meta: { title: "专业管理" }
       }
     ]
   },
   {
-    path: '/task',
+    path: "/task",
     component: Layout,
-    redirect: '/task/plan',
-    name: 'Task',
+    redirect: "/task/plan",
+    name: "Task",
     meta: {
-      title: '任务分配',
-      icon: 'el-icon-document-add'
+      title: "任务分配",
+      icon: "el-icon-document-add"
     },
     children: [
       {
-        path: 'plan',
-        component: () => import('@/views/task/plan/index'), 
-        name: 'Plan',
-        meta: { title: '计划工作管理' },
+        path: "plan",
+        component: () => import("@/views/task/plan/index"),
+        name: "Plan",
+        meta: { title: "计划工作管理" }
       },
       {
-        path: 'danger',
-        component: () => import('@/views/task/danger/index'), 
-        name: 'Danger',
-        meta: { title: '隐患作业管理' },
+        path: "danger",
+        component: () => import("@/views/task/danger/index"),
+        name: "Danger",
+        meta: { title: "隐患作业管理" }
       },
       {
-        path: 'destruction',
-        component: () => import('@/views/task/destruction/index'), 
-        name: 'Destruction',
-        meta: { title: '防外力破坏管理' },
+        path: "destruction",
+        component: () => import("@/views/task/destruction/index"),
+        name: "Destruction",
+        meta: { title: "防外力破坏管理" }
       },
       {
-        path: 'repair',
-        component: () => import('@/views/task/repair/index'), 
-        name: 'Repair',
-        meta: { title: '抢修工作管理' },
+        path: "repair",
+        component: () => import("@/views/task/repair/index"),
+        name: "Repair",
+        meta: { title: "抢修工作管理" }
       }
     ]
   },
   {
-    path: '/function',
+    path: "/function",
     component: Layout,
-    redirect: '/function/manage',
-    name: 'Function',
+    redirect: "/function/manage",
+    name: "Function",
     meta: {
-      title: '功能管理',
-      icon: 'el-icon-setting'
+      title: "功能管理",
+      icon: "el-icon-setting"
     },
     children: [
       {
-        path: 'manage',
-        component: () => import('@/views/function/manage/index'), 
-        name: 'Manage',
-        meta: { title: '功能管理' },
+        path: "manage",
+        component: () => import("@/views/function/manage/index"),
+        name: "Manage",
+        meta: { title: "功能管理" }
+      }
+    ]
+  },
+  {
+    path: "/displacement",
+    component: Layout,
+    redirect: "/displacement/equipment",
+    name: "Displacement",
+    meta: {
+      title: "边坡位移",
+      icon: "el-icon-setting"
+    },
+    children: [
+      {
+        path: "equipment",
+        component: () => import("@/views/displacement/equipment/index"),
+        name: "Equipment",
+        meta: { title: "边坡位移设备" }
+      },
+      {
+        path: "datas",
+        component: () => import("@/views/displacement/datas/index"),
+        name: "Datas",
+        meta: { title: "边坡位移报警数据" }
+      }
+    ]
+  },
+  {
+    path: "/tower",
+    component: Layout,
+    redirect: "/tower/equipment",
+    name: "Tower",
+    meta: {
+      title: "杆塔模型",
+      icon: "el-icon-setting"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/tower/list/index"),
+        name: "List",
+        meta: { title: "杆塔列表" }
+      },
+      {
+        path: "sensors",
+        component: () => import("@/views/tower/sensors/index"),
+        name: "Sensors",
+        meta: { title: "传感器列表" }
+      }
+    ]
+  },
+  {
+    path: "/jg",
+    component: Layout,
+    redirect: "/jg/upload",
+    name: "Jg",
+    meta: {
+      title: "剑阁系统",
+      icon: "el-icon-s-home"
+    },
+    children: [
+      {
+        path: "upload",
+        component: () => import("@/views/jg/upload/index"),
+        name: "Upload",
+        meta: { title: "上传数据" }
+      },
+      {
+        path: "lists",
+        component: () => import("@/views/jg/lists/index"),
+        name: "Lists",
+        meta: { title: "数据列表" }
+      },
+      {
+        path: "photo",
+        component: () => import("@/views/jg/photo/index"),
+        name: "Photo",
+        meta: { title: "上传照片" }
+      },
+      {
+        path: "plist",
+        component: () => import("@/views/jg/plist/index"),
+        name: "Plist",
+        meta: { title: "照片列表" }
       }
     ]
   },
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-]
+  { path: "*", redirect: "/404", hidden: true }
+];
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  });
 
-const router = createRouter()
+const router = createRouter();
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
-export default router
+export default router;

@@ -12,15 +12,21 @@
         </el-input>
       </div>
       <div class="middle">
-        <div @click="photo">
-          <p>抓图模块</p>
-        </div>
-        <div @click="add">
-          <p>批量转移</p>
-        </div>
-        <div @click="updates">
-          <p>更新设备</p>
-        </div>
+        <el-button type="text" @click="photo">
+          <div>
+            <p>抓图模块</p>
+          </div></el-button
+        >
+        <el-button type="text" @click="add">
+          <div>
+            <p>批量转移</p>
+          </div></el-button
+        >
+        <el-button type="text" @click="updates">
+          <div>
+            <p>更新设备</p>
+          </div></el-button
+        >
       </div>
 
       <el-dialog
@@ -170,7 +176,7 @@
                 <el-dialog
                   title="修改信息"
                   :visible.sync="dialogFormVisible"
-                  width="500px"
+                  width="800px"
                 >
                   <el-form :model="form">
                     <el-form-item label="设备名称" label-width="120px">
@@ -196,7 +202,7 @@
                     >
                       <el-select
                         v-model="form.region"
-                        width="100%"
+                        style="width:100%"
                         placeholder="请选择"
                       >
                         <el-option
@@ -213,7 +219,7 @@
                     >
                       <el-select
                         v-model="form.regions"
-                        width="100%"
+                        style="width:100%"
                         placeholder="请选择"
                       >
                         <el-option
@@ -874,8 +880,9 @@ export default {
 }
 .middle div {
   background-color: #00479d;
-  margin: 10px;
+  padding: 5px;
   border-radius: 7px;
+  margin-left: 10px;
 }
 .middle p {
   color: #fff;

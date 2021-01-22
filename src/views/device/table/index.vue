@@ -3,9 +3,15 @@
     <p class="title">杆塔倾斜设备管理</p>
     <div class="top">
       <div class="subtext">
-        <div v-for="(item, index) in subtext" :key="index">
-          <p>{{ item }}</p>
-        </div>
+        <el-button type="text" @click="delet">
+          <div>
+            <p>批量删除</p>
+          </div></el-button
+        ><el-button type="text" @click="update">
+          <div>
+            <p>批量升级</p>
+          </div></el-button
+        >
       </div>
       <div class="total">
         共有数据：<span>{{ total }} </span>条
@@ -28,9 +34,10 @@
         ref="multipleTable"
         :data="Newitem"
         tooltip-effect="dark"
+        border
         style="width: 100%"
         :row-style="{ height: '20px' }"
-        :cell-style="{ padding: '5px' }"
+        :cell-style="{ padding: '0' }"
         :header-cell-style="{ background: '#CFEEFD', color: '#000' }"
         @selection-change="handleSelectionChange"
       >
@@ -73,10 +80,13 @@
         <el-table-column prop="onlineTime" label="最后上线时间">
         </el-table-column>
         <el-table-column prop="operate" label="操作">
-          <template>
-            <img src="../../../../public/image/device/03.png" alt="" />
-            &nbsp;
-            <img src="../../../../public/image/device/05.png" alt="" />
+          <template slot-scope="scope">
+            <el-button @click="edit(scope.row)" type="text">
+              <img src="../../../../public/image/device/03.png" alt="" />
+            </el-button>
+            <el-button @click="del(scope.row)" type="text">
+              <img src="../../../../public/image/device/05.png" alt="" />
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -89,6 +99,98 @@
       >
       </el-pagination>
     </div>
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="800px">
+      <div style="height:600px;overflow: auto">
+        <el-form ref="form" :model="form" label-width="130px">
+          <el-form-item label="设备序列号">
+            {{ deviceSerial }}
+          </el-form-item>
+          <el-form-item label="流量手机号">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="是否开启微视频">
+            <el-radio-group v-model="form.resource">
+              <el-radio label="是"></el-radio>
+              <el-radio label="否"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="视频时长（秒）">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="图片传输超时时间（分钟）">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="是否图片水印">
+            <el-radio-group v-model="form.resource">
+              <el-radio label="是"></el-radio>
+              <el-radio label="否"></el-radio>
+            </el-radio-group> </el-form-item
+          ><el-form-item label="相对零点/绝对零点">
+            <el-radio-group v-model="form.resource">
+              <el-radio label="相"></el-radio>
+              <el-radio label="绝"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="倾斜报警域值">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="图片对比域值">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="部门">
+            <el-select
+              v-model="form.region"
+              placeholder="请选择部门"
+              style="width:100%"
+            >
+              <el-option></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="设备名称">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="设备位置">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="经度">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="纬度">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+
+          <el-form-item label="拍照时间">
+            <el-select
+              v-model="form.region"
+              placeholder="请选择"
+              style="width:100%"
+            >
+              <el-option></el-option>
+            </el-select> </el-form-item
+          ><el-form-item label="推送用户">
+            <el-select
+              v-model="form.region"
+              placeholder="请选择"
+              style="width:100%"
+            >
+              <el-option></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input
+              placeholder="请输入备注信息"
+              v-model="form.desc"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -102,9 +204,21 @@ export default {
       departID: "1/",
       input3: "",
       total: 141,
-      subtext: ["批量删除", "批量升级"],
+      multipleSelection: [],
       online: 0,
-      line: 0
+      line: 0,
+      dialogVisible: false,
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      },
+      deviceSerial: ""
     };
   },
   mounted() {
@@ -114,12 +228,89 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
+    edit(val) {
+      this.dialogVisible = true;
+      this.deviceSerial = val.deviceSerial;
+    },
+    del(val) {
+      this.$confirm("此操作将永久删除, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    delet() {
+      if (this.multipleSelection.length == 0) {
+        this.$message({
+          message: "你还没有选择",
+          type: "warning"
+        });
+      } else {
+        this.$confirm("此操作将永久删除, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除"
+            });
+          });
+      }
+    },
+    update() {
+      if (this.multipleSelection.length == 0) {
+        this.$message({
+          message: "你还没有选择",
+          type: "warning"
+        });
+      } else {
+        this.$confirm("确认要升级到最新版本吗？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.$message({
+              type: "success",
+              message: "升级成功!"
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消升级"
+            });
+          });
+      }
+    },
     open(val, index) {
       // console.log(val);
       // console.log(index);
       this.$prompt("请输入序列号", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
+        inputPattern: /^[\u4e00-\u9fa5a-zA-Z0-9]{1,40000}$/,
+        inputErrorMessage: "设备序列号不能为空",
         inputValue: val.deviceSerial
       })
         .then(({ value }) => {
@@ -180,6 +371,10 @@ export default {
 </script>
 
 <style scoped>
+.el-dialog {
+  height: 60%;
+  overflow: auto;
+}
 .title {
   font-size: 40px;
   margin-top: 15px;
@@ -189,7 +384,7 @@ export default {
 .top {
   margin: -10px 30px;
   /* margin-bottom: 20px; */
-  padding-bottom: 30px;
+  padding-bottom: 20px;
   border-bottom: 1px solid #666666;
 }
 .subtext {
@@ -219,8 +414,8 @@ export default {
 }
 .search {
   width: 280px;
-  float: right;
-  margin: 25px 30px 0 30px;
+  /* float: right; */
+  margin: 20px 30px -10px 30px;
   height: 50px;
 }
 .table-box {
