@@ -375,7 +375,7 @@
 </template>
 
 <script>
-import { construct, destruct } from "@aximario/json-tree";
+// import { construct, destruct } from "@aximario/json-tree";
 export default {
   data() {
     return {
@@ -419,7 +419,7 @@ export default {
       value: {},
       index: 0,
       indexs: 0,
-      multipleSelection: "",
+      multipleSelection: [],
       src: "",
       action: "",
       fileList: [],

@@ -137,60 +137,60 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: "/configure",
-    component: Layout,
-    redirect: "/configure/params",
-    name: "Configure",
-    meta: {
-      title: "全局配置",
-      icon: "el-icon-aim"
-    },
-    children: [
-      {
-        path: "params",
-        component: () => import("@/views/configure/params/index"),
-        name: "Params",
-        meta: { title: "全局参数" }
-      },
-      {
-        path: "upgrade",
-        component: () => import("@/views/configure/upgrade/index"),
-        name: "Upgrade",
-        meta: { title: "远程升级" }
-      },
-      {
-        path: "data",
-        component: () => import("@/views/configure/data/index"),
-        name: "Data",
-        meta: { title: "数据同步" }
-      },
-      {
-        path: "maintain",
-        component: () => import("@/views/configure/maintain/index"),
-        name: "Maintain",
-        meta: { title: "设备维护" }
-      }
-    ]
-  },
-  {
-    path: "/manage",
-    component: Layout,
-    redirect: "/manage/standing",
-    name: "Manages",
-    meta: {
-      title: "台账管理",
-      icon: "el-icon-film"
-    },
-    children: [
-      {
-        path: "standing",
-        component: () => import("@/views/manage/standing/index"),
-        name: "Standing",
-        meta: { title: "台账管理" }
-      }
-    ]
-  },
+  // {
+  //   path: "/configure",
+  //   component: Layout,
+  //   redirect: "/configure/params",
+  //   name: "Configure",
+  //   meta: {
+  //     title: "全局配置",
+  //     icon: "el-icon-aim"
+  //   },
+  //   children: [
+  //     {
+  //       path: "params",
+  //       component: () => import("@/views/configure/params/index"),
+  //       name: "Params",
+  //       meta: { title: "全局参数" }
+  //     },
+  //     {
+  //       path: "upgrade",
+  //       component: () => import("@/views/configure/upgrade/index"),
+  //       name: "Upgrade",
+  //       meta: { title: "远程升级" }
+  //     },
+  //     {
+  //       path: "data",
+  //       component: () => import("@/views/configure/data/index"),
+  //       name: "Data",
+  //       meta: { title: "数据同步" }
+  //     },
+  //     {
+  //       path: "maintain",
+  //       component: () => import("@/views/configure/maintain/index"),
+  //       name: "Maintain",
+  //       meta: { title: "设备维护" }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: "/manage",
+  //   component: Layout,
+  //   redirect: "/manage/standing",
+  //   name: "Manages",
+  //   meta: {
+  //     title: "台账管理",
+  //     icon: "el-icon-film"
+  //   },
+  //   children: [
+  //     {
+  //       path: "standing",
+  //       component: () => import("@/views/manage/standing/index"),
+  //       name: "Standing",
+  //       meta: { title: "台账管理" }
+  //     }
+  //   ]
+  // },
   {
     path: "/journal",
     component: Layout,
@@ -213,18 +213,18 @@ export const constantRoutes = [
         name: "Video",
         meta: { title: "视频监测设备日志" }
       },
-      {
-        path: "system",
-        component: () => import("@/views/journal/system/index"),
-        name: "Systems",
-        meta: { title: "系统日志" }
-      },
-      {
-        path: "heartbeat",
-        component: () => import("@/views/journal/heartbeat/index"),
-        name: "Heartbeat",
-        meta: { title: "心跳日志" }
-      },
+      // {
+      //   path: "system",
+      //   component: () => import("@/views/journal/system/index"),
+      //   name: "Systems",
+      //   meta: { title: "系统日志" }
+      // },
+      // {
+      //   path: "heartbeat",
+      //   component: () => import("@/views/journal/heartbeat/index"),
+      //   name: "Heartbeat",
+      //   meta: { title: "心跳日志" }
+      // },
       {
         path: "letter",
         component: () => import("@/views/journal/letter/index"),
@@ -461,7 +461,7 @@ export const constantRoutes = [
     redirect: "/tower/equipment",
     name: "Tower",
     meta: {
-      title: "杆塔模型",
+      title: "测温装置",
       icon: "el-icon-setting"
     },
     children: [
@@ -469,52 +469,40 @@ export const constantRoutes = [
         path: "list",
         component: () => import("@/views/tower/list/index"),
         name: "List",
-        meta: { title: "杆塔列表" }
+        meta: { title: "测温设备" }
       },
       {
         path: "sensors",
         component: () => import("@/views/tower/sensors/index"),
         name: "Sensors",
-        meta: { title: "传感器列表" }
+        meta: { title: "设备列表" }
       }
     ]
   },
-  {
-    path: "/jg",
-    component: Layout,
-    redirect: "/jg/upload",
-    name: "Jg",
-    meta: {
-      title: "剑阁系统",
-      icon: "el-icon-s-home"
-    },
-    children: [
-      {
-        path: "upload",
-        component: () => import("@/views/jg/upload/index"),
-        name: "Upload",
-        meta: { title: "上传数据" }
-      },
-      {
-        path: "lists",
-        component: () => import("@/views/jg/lists/index"),
-        name: "Lists",
-        meta: { title: "数据列表" }
-      },
-      {
-        path: "photo",
-        component: () => import("@/views/jg/photo/index"),
-        name: "Photo",
-        meta: { title: "上传照片" }
-      },
-      {
-        path: "plist",
-        component: () => import("@/views/jg/plist/index"),
-        name: "Plist",
-        meta: { title: "照片列表" }
-      }
-    ]
-  },
+  // {
+  //   path: "/jg",
+  //   component: Layout,
+  //   redirect: "/jg/upload",
+  //   name: "Jg",
+  //   meta: {
+  //     title: "测温装置",
+  //     icon: "el-icon-s-home"
+  //   },
+  //   children: [
+  //     {
+  //       path: "upload",
+  //       component: () => import("@/views/jg/upload/index"),
+  //       name: "Upload",
+  //       meta: { title: "测温设备" }
+  //     },
+  //     {
+  //       path: "lists",
+  //       component: () => import("@/views/jg/lists/index"),
+  //       name: "Lists",
+  //       meta: { title: "传感器列表" }
+  //     }
+  //   ]
+  // },
   // 404 page must be placed at the end !!!
   { path: "*", redirect: "/404", hidden: true }
 ];

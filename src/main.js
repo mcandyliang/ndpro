@@ -17,9 +17,12 @@ import "@/icons"; // icon
 import "@/permission"; // permission control
 import axios from "axios";
 import Qs from "qs";
-
-// axios.defaults.baseURL = 'http://192.168.1.7:3000'
-Vue.prototype.baseUrl = "http://192.168.1.9:3000";
+// import $ from 'jquery'
+// import "../public/zTree_v3/js/jquery.ztree.core.min.js";
+// import "../public/zTree_v3/js/jquery.ztree.excheck.min.js";
+// import "../public/zTree_v3/css/zTreeStyle/zTreeStyle.css";
+// axios.defaults.baseURL = "http://192.168.1.110:3000";
+Vue.prototype.baseUrl = "http://www.cqset.com:3000";
 Vue.prototype.$get = function(api, data) {
   if (data === undefined) {
     data = {};
